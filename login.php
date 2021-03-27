@@ -8,14 +8,13 @@ if ( isset($_POST['cancel'] ) ) {
 $salt = 'XyZzy12*_';
 $stored_hash = '1a52e17fa899cf40fb04cfc42e6352f1';
 
-$failure = false;  // If we have no POST data
 
 // Check to see if we have some POST data, if we do process it
 if ( isset($_POST['email']) && isset($_POST['pass']) ) {
     if ( strlen($_POST['email']) < 1 || strlen($_POST['pass']) < 1 ) {
         $_SESSION['error'] = "Email and password are required";
         header("Location: login.php");
-return;
+        return;
     } elseif (strpos($_POST['email'], "@") === false){
         $_SESSION['error'] = "Email must have an at-sign (@)";
 header("Location: login.php");
@@ -25,14 +24,17 @@ return;
         if ( $check == $stored_hash ) {
             // Redirect the browser to view.php
 $_SESSION['name'] = $_POST['email'];
+error_log("Login success ".$_POST['email']);
 header("Location: view.php");
 return;
-            error_log("Login success ".$_POST['email']);
+            
         } else {
             $_SESSION["error"] = "Incorrect password.";
-            header( 'Location: login.php' ) ;
-            return;
             error_log("Login fail ".$_POST['email']." $check");
+            header( 'Location: login.php' ) ;
+            
+            return;
+           
         }
     }
 }
@@ -40,7 +42,6 @@ return;
 
 // Fall through into the View
 ?>
-<!DOCTYPE html>
 <html>
 <head>
 <?php require_once "bootstrap.php"; ?>
@@ -61,7 +62,7 @@ if ( isset($_SESSION['error']) ) {
 <input type="text" name="email" id="email"><br/>
 <label for="id_1723">Password</label>
 <input type="password" name="pass" id="id_1723"><br/>
-<input type="submit" value="Log In">Submit</input>
+<input type="submit" value="Log In">
 <input type="submit" name="cancel" value="Cancel">
 </form>
 <p>
@@ -72,3 +73,4 @@ makes (all lower case) followed by 123. -->
 </p>
 </div>
 </body>
+</html>

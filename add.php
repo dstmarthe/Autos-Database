@@ -1,18 +1,27 @@
 <?php
+session_start();
 require_once "pdo.php";
-if ( ! isset($_GET['name']) || strlen($_GET['name']) < 1  ) {
-    die('Name parameter missing');
+if ( ! isset($_SESSION['name']) ) {
+    die('Not logged in');
 }
-$failure = false;
+if ( isset($_POST['logout']) ) {
+    header('Location: logout.php');
+    return;
+}
+
 if ( isset($_POST['make']) && isset($_POST['mileage']) 
      && isset($_POST['year'])) 
      {
          if (! is_numeric($_POST['mileage']) || ! is_numeric($_POST['year']))
          {
-            $failure = "Mileage and year must be numeric";
+            $_SESSION['error'] = "Mileage and year must be numeric";
+            header("Location: add.php");
+        return;
          } elseif (strlen($_POST['make']) < 1 )
          {
-             $failure = "Make is required";
+            $_SESSION['error'] = "Make is required";
+            header("Location: add.php");
+        return;
          }
          else {
         $stmt = $pdo->prepare('INSERT INTO autos
@@ -21,10 +30,15 @@ if ( isset($_POST['make']) && isset($_POST['mileage'])
         ':mk' => htmlentities($_POST['make']),
         ':yr' => htmlentities($_POST['year']),
         ':mi' => htmlentities($_POST['mileage']))
+
       );
-      $failure = "Success";
+      $_SESSION['success'] = "Record inserted";
+header("Location: view.php");
+return;
     } 
 }
+
+
 
 
 ?>
@@ -32,19 +46,6 @@ if ( isset($_POST['make']) && isset($_POST['mileage'])
 <head><title>Dale Stmarthe</title></head><body>
 <h1><strong>Welcome to Autos Database</strong></h1>
 <p>Add A New Car</p>
-<?php
-
-// Note triple not equals and think how badly double
-// not equals would work here...
-if ( $failure !== false ) {
-    if ($failure == "Success"){
-        echo('<p style="color: green;">Record inserted</p>');
-       }else
-    // Look closely at the use of single and double quotes
-    echo('<p style="color: red;">'.htmlentities($failure)."</p>\n");
-
-}
-?>
 <form method="post">
 <p>Make
 <input type="text" name="make" size="40"></p>
@@ -53,24 +54,15 @@ if ( $failure !== false ) {
 <p>Year
 <input type="text" name="year"></p>
 <p><input type="submit" value="Add New"/></p>
+<form method="POST">
 <p><button name="logout">logout</button></p>
 </form>
-<table border="1">
+</form>
 <?php
-$stmt = $pdo->query("SELECT make, mileage, year FROM autos");
-$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-foreach ( $rows as $row ) {
-    echo "<tr><td>";
-    echo($row['make']);
-    echo("</td><td>");
-    echo($row['mileage']);
-    echo("</td><td>");
-    echo($row['year']);
-    echo("</td></tr>\n");
+
+if ( isset($_SESSION['error']) ) {
+    echo('<p style="color: red;">'.htmlentities($_SESSION['error'])."</p>\n");
+    unset($_SESSION['error']);
 }
-
 ?>
-</table>
-
-</body>
 </html>
