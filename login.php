@@ -58,7 +58,7 @@ if ( isset($_SESSION['error']) ) {
 }
 ?>
 <form method="POST">
-<label for="email">Email</label>
+<label for="email">User Name</label>
 <input type="text" name="email" id="email"><br/>
 <label for="id_1723">Password</label>
 <input type="password" name="pass" id="id_1723"><br/>
@@ -68,8 +68,8 @@ if ( isset($_SESSION['error']) ) {
 <p>
 For a password hint, view source and find a password hint
 in the HTML comments.
-<!-- Hint: The password is the four character sound a cat
-makes (all lower case) followed by 123. -->
+<!-- Hint: The password is the a backend server html language
+(all lower case) followed by 123. -->
 </p>
 </div>
 </body>

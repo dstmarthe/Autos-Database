@@ -21,10 +21,7 @@ if ( isset($_POST['logout']) ) {
 <html>
 <head><title>Dale Stmarthe</title></head><body>
 <h1> Tracking Car Database</h1>
-<p><a href="add.php">Add New</a></p>
-<form method="POST">
-<p><button name="logout">logout</button></p>
-</form>
+
 <table border="1">
 <?php
 $stmt = $pdo->query("SELECT make, mileage, year FROM autos");
@@ -40,6 +37,10 @@ foreach ( $rows as $row ) {
 }
 
 ?>
+<p><a href="add.php">Add A New Entry</a></p>
+<form method="POST">
+<p><button name="logout">logout</button></p>
+</form>
 </table>
 
 </body>

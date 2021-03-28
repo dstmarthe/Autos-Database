@@ -2,7 +2,9 @@
 session_start();
 require_once "pdo.php";
 if ( ! isset($_SESSION['name']) ) {
-    die('Not logged in');
+    die('ACCESS DENIED');
+    header('Location: logout.php');
+    return;
 }
 if ( isset($_POST['logout']) ) {
     header('Location: logout.php');
@@ -50,6 +52,8 @@ return;
 <p>Make
 <input type="text" name="make" size="40"></p>
 <p>Mileage
+<input type="text" name="mileage"></p>
+<p>Model
 <input type="text" name="mileage"></p>
 <p>Year
 <input type="text" name="year"></p>
