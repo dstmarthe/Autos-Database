@@ -14,17 +14,20 @@ if ( isset($_POST['logout']) ) {
 if ( isset($_POST['make']) && isset($_POST['mileage']) 
      && isset($_POST['year'])) 
      {
-         if (! is_numeric($_POST['mileage']) || ! is_numeric($_POST['year']))
+         if (strlen($_POST['make']) < 1 || strlen($_POST['model']) < 1 || strlen($_POST['year']) < 1 ||  strlen($_POST['mileage']) < 1)
+         {
+            $_SESSION['error'] = "All values are required";
+            header("Location: add.php");
+        return;
+         
+         }
+         elseif (! is_numeric($_POST['mileage']) || ! is_numeric($_POST['year']))
          {
             $_SESSION['error'] = "Mileage and year must be numeric";
             header("Location: add.php");
         return;
-         } elseif (strlen($_POST['make']) < 1 || strlen($_POST['model']) < 1|| strlen($_POST['year']) < 1||  strlen($_POST['mileage'])< 1)
-         {
-            $_SESSION['error'] = "All fields are required";
-            header("Location: add.php");
-        return;
-         }
+         } 
+         
          else {
         $stmt = $pdo->prepare('INSERT INTO autos
         (make, model, year, mileage) VALUES ( :mk, :mo, :yr, :mi)');
@@ -35,7 +38,7 @@ if ( isset($_POST['make']) && isset($_POST['mileage'])
         ':mi' => htmlentities($_POST['mileage']))
 
       );
-      $_SESSION['success'] = "Record inserted";
+      $_SESSION['success'] = "Record added";
 header("Location: index.php");
 return;
     } 

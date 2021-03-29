@@ -25,7 +25,7 @@
 <div class="container">
 <p>
 <h1>Welcome to this Automobile Database</h1>
-<a href="login.php">Please Log In</a>
+<a href="login.php">Please log in</a>
 </p>
 </div>
 <div class="container">
@@ -49,28 +49,24 @@ echo " No rows found";
     echo("</td><td>");
     echo(htmlentities($row['year']));
     echo("</td><td>");
-    echo('<a href="edit.php">Edit</a> / ');
-    echo('<a href="index.php?autos_id='.$row['autos_id'].'">Delete</a>');
+    echo('<a href="edit.php?autos_id='.$row['autos_id'].'">Edit</a> / ');
+    echo('<a href="delete.php?autos_id='.$row['autos_id'].'">Delete</a>');
     echo("</td></tr>\n");
 }
 }
 ?>
 </table>
 <?php
-if (isset($_GET['autos_id']))
-{
 
-    echo('<div class= "container"');
-    echo("<h2> Confirm: Deleting car id: {$_GET['autos_id']} ?</h2>");
-    echo('<form method="POST">
-    <p><button name="delete">Delete</button></p>
-    </form><p><a href="index.php">Cancel</a></p>');
-    echo('</div>');
+
+if ( isset($_SESSION['success']) ) {
+    echo('<p style="color: green;">'.htmlentities($_SESSION['success'])."</p>\n");
+    unset($_SESSION['success']);
 }
 ?>
 
 
-<p><a href="add.php">Add a New Entry</a></p>
+<p><a href="add.php">Add New Entry</a></p>
 <form method="POST">
 <p><button name="logout">logout</button></p>
 </form>
