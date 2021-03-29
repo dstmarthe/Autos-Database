@@ -3,7 +3,7 @@ session_start();
 require_once "pdo.php";
 if ( ! isset($_SESSION['name']) ) {
     die('ACCESS DENIED');
-    header('Location: logout.php');
+    header('Location: index.php');
     return;
 }
 if ( isset($_POST['logout']) ) {
@@ -19,29 +19,27 @@ if ( isset($_POST['make']) && isset($_POST['mileage'])
             $_SESSION['error'] = "Mileage and year must be numeric";
             header("Location: add.php");
         return;
-         } elseif (strlen($_POST['make']) < 1 )
+         } elseif (strlen($_POST['make']) < 1 || strlen($_POST['model']) < 1|| strlen($_POST['year']) < 1||  strlen($_POST['mileage'])< 1)
          {
-            $_SESSION['error'] = "Make is required";
+            $_SESSION['error'] = "All fields are required";
             header("Location: add.php");
         return;
          }
          else {
         $stmt = $pdo->prepare('INSERT INTO autos
-        (make, year, mileage) VALUES ( :mk, :yr, :mi)');
+        (make, model, year, mileage) VALUES ( :mk, :mo, :yr, :mi)');
       $stmt->execute(array(
         ':mk' => htmlentities($_POST['make']),
+        ':mo' => htmlentities($_POST['model']),
         ':yr' => htmlentities($_POST['year']),
         ':mi' => htmlentities($_POST['mileage']))
 
       );
       $_SESSION['success'] = "Record inserted";
-header("Location: view.php");
+header("Location: index.php");
 return;
     } 
 }
-
-
-
 
 ?>
 <html>
@@ -54,7 +52,7 @@ return;
 <p>Mileage
 <input type="text" name="mileage"></p>
 <p>Model
-<input type="text" name="mileage"></p>
+<input type="text" name="model"></p>
 <p>Year
 <input type="text" name="year"></p>
 <p><input type="submit" value="Add New"/></p>

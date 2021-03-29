@@ -25,7 +25,7 @@ return;
             // Redirect the browser to view.php
 $_SESSION['name'] = $_POST['email'];
 error_log("Login success ".$_POST['email']);
-header("Location: view.php");
+header("Location: index.php");
 return;
             
         } else {

@@ -4,6 +4,8 @@ require_once "pdo.php";
 
 if ( ! isset($_SESSION['name']) ) {
     die('Not logged in');
+    header('Location: index.php');
+    return;
 }
 
 if ( isset($_SESSION['success']) ) {
@@ -26,6 +28,11 @@ if ( isset($_POST['logout']) ) {
 <?php
 $stmt = $pdo->query("SELECT make, mileage, year FROM autos");
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if ( $row === false ) {
+    $_SESSION['error'] = 'Bad value for user_id';
+    header( 'Location: index.php' ) ;
+    return;
+}
 foreach ( $rows as $row ) {
     echo "<tr><td>";
     echo($row['make']);
